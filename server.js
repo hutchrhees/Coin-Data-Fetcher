@@ -9,12 +9,19 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static("public"));
 
+// Serve the csvs directory as a static directory
+app.use("/csvs", express.static(path.join(__dirname, "csvs")));
+
 const saveCsvFile = (data, filename) => {
   const json2csvParser = new Parser();
   const csv = json2csvParser.parse(data);
-  const csvFilePath = path.join(__dirname, "public", filename);
+  const csvDir = path.join(__dirname, "csvs"); // Directory for CSV files
+  if (!fs.existsSync(csvDir)) {
+    fs.mkdirSync(csvDir); // Create the directory if it doesn't exist
+  }
+  const csvFilePath = path.join(csvDir, filename);
   fs.writeFileSync(csvFilePath, csv);
-  return `/${filename}`;
+  return `/csvs/${filename}`; // Return the relative path for the client
 };
 
 app.get("/get-coin-options", async (req, res) => {
@@ -65,24 +72,10 @@ app.get("/fetch-data", async (req, res) => {
           url = `https://api.kraken.com/0/public/OHLC?pair=${tradingPair}&interval=1`;
           filename = `${coin}_candle_data.csv`;
           break;
-        // Handle unsupported data types
-        case "pre-trade":
-        case "post-trade":
-        case "smaller-interval":
-        case "historical":
-        case "aggregated-trade":
-        case "market-depth":
-        case "volume":
-        case "liquidity":
-        case "tick-by-tick":
-        case "imbalance":
-        case "order-flow":
-        case "indicative":
+        default:
           return res
             .status(400)
             .json({ error: `${dataType} is not supported by the Kraken API` });
-        default:
-          return res.status(400).json({ error: "Unsupported data type" });
       }
 
       const response = await axios.get(url);
