@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Data Fetcher</title>
+    <style>
+      .tab {
+        display: inline-block;
+        margin-right: 10px;
+        padding: 10px;
+        background: #ddd;
+        cursor: pointer;
+      }
+      .tab.active {
+        background: #bbb;
+      }
+      .data-section {
+        display: none;
+      }
+      .data-section.active {
+        display: block;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Crypto Data Fetcher</h1>
+    <form id="dataForm">
+      <label for="exchange">Select Exchange:</label>
+      <select id="exchange">
+        <option value="kraken">Kraken</option>
+      </select>
+      <br />
+      <label for="coin">Select Coin:</label>
+      <select id="coin"></select>
+      <br />
+      <label for="endDate">End Date:</label>
+      <input type="date" id="endDate" />
+      <br />
+      <button type="submit">Fetch Data</button>
+    </form>
+    <div id="tabs">
+      <div class="tab" data-type="ohlc">OHLC Data</div>
+      <div class="tab" data-type="orderbook">Order Book Data</div>
+      <div class="tab" data-type="tick">Tick Data</div>
+      <div class="tab" data-type="candle">Candle Data</div>
+    </div>
+    <div id="ohlc" class="data-section">
+      <a id="ohlcDownloadLink" style="display: none">Download OHLC CSV</a>
+      <table id="ohlcTable" border="1" style="display: none">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="orderbook" class="data-section">
+      <a id="orderbookDownloadLink" style="display: none"
+        >Download Order Book CSV</a
+      >
+      <table id="orderbookTable" border="1" style="display: none">
+        <thead>
+          <tr>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="tick" class="data-section">
+      <a id="tickDownloadLink" style="display: none">Download Tick CSV</a>
+      <table id="tickTable" border="1" style="display: none">
+        <thead>
+          <tr>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>Time</th>
+            <th>Side</th>
+            <th>Order Type</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="candle" class="data-section">
+      <a id="candleDownloadLink" style="display: none">Download Candle CSV</a>
+      <table id="candleTable" border="1" style="display: none">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
