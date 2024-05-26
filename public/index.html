@@ -45,6 +45,7 @@
       <label for="exchange">Select Exchange:</label>
       <select id="exchange">
         <option value="kraken">Kraken</option>
+        <option value="coinbase">Coinbase</option>
       </select>
       <br />
       <label for="coin">Select Coin:</label>
@@ -55,11 +56,16 @@
       <br />
       <button type="submit">Fetch Data</button>
     </form>
+    <p id="successMessage" style="display: none; color: green">
+      Data fetched successfully!
+    </p>
     <div id="tabs">
       <div class="tab" data-type="ohlc">OHLC Data</div>
       <div class="tab" data-type="orderbook">Order Book Data</div>
       <div class="tab" data-type="tick">Tick Data</div>
-      <div class="tab" data-type="candle">Candle Data</div>
+      <!-- <div class="tab" data-type="candle">Candle Data</div> -->
+      <!-- <div class="tab" data-type="realtime-market">Realtime Market Data</div> -->
+      <!-- <div class="tab" data-type="historical">Historical Data</div> -->
     </div>
     <div id="ohlc" class="data-section">
       <a id="ohlcDownloadLink" style="display: none">Download OHLC CSV</a>
@@ -76,6 +82,9 @@
         </thead>
         <tbody></tbody>
       </table>
+      <p id="ohlcNoData" style="display: none; color: red">
+        Data not available
+      </p>
     </div>
     <div id="orderbook" class="data-section">
       <a id="orderbookDownloadLink" style="display: none"
@@ -87,10 +96,14 @@
             <th>Price</th>
             <th>Volume</th>
             <th>Timestamp</th>
+            <th>Type</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
+      <p id="orderbookNoData" style="display: none; color: red">
+        Data not available
+      </p>
     </div>
     <div id="tick" class="data-section">
       <a id="tickDownloadLink" style="display: none">Download Tick CSV</a>
@@ -106,8 +119,11 @@
         </thead>
         <tbody></tbody>
       </table>
+      <p id="tickNoData" style="display: none; color: red">
+        Data not available
+      </p>
     </div>
-    <div id="candle" class="data-section">
+    <!-- <div id="candle" class="data-section">
       <a id="candleDownloadLink" style="display: none">Download Candle CSV</a>
       <table id="candleTable" border="1" style="display: none">
         <thead>
@@ -122,7 +138,49 @@
         </thead>
         <tbody></tbody>
       </table>
+      <p id="candleNoData" style="display: none; color: red">
+        Data not available
+      </p>
+    </div> -->
+    <!-- <div id="realtime-market" class="data-section">
+      <a id="realtimeMarketDownloadLink" style="display: none"
+        >Download Realtime Market CSV</a
+      >
+      <table id="realtimeMarketTable" border="1" style="display: none">
+        <thead>
+          <tr>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p id="realtimeMarketNoData" style="display: none; color: red">
+        Data not available
+      </p>
     </div>
+    <div id="historical" class="data-section">
+      <a id="historicalDownloadLink" style="display: none"
+        >Download Historical CSV</a
+      >
+      <table id="historicalTable" border="1" style="display: none">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p id="historicalNoData" style="display: none; color: red">
+        Data not available
+      </p>
+    </div> -->
     <script src="script.js"></script>
   </body>
 </html>

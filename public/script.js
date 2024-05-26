@@ -1,11 +1,18 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const coinSelect = document.getElementById("coin");
   const exchangeSelect = document.getElementById("exchange");
+  const successMessage = document.getElementById("successMessage");
 
   async function fetchCoins() {
     try {
-      const response = await fetch("/get-coin-options?exchange=kraken");
-      const coins = await response.json();
+      const exchange = exchangeSelect.value;
+      const response = await fetch(`/get-coin-options?exchange=${exchange}`);
+      let coins = await response.json();
+
+      // Sort coins alphanumerically
+      coins.sort();
+
+      coinSelect.innerHTML = "";
       coins.forEach((coin) => {
         const option = document.createElement("option");
         option.value = coin;
@@ -17,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
+  exchangeSelect.addEventListener("change", fetchCoins);
   await fetchCoins();
 
   const tabs = document.querySelectorAll(".tab");
@@ -43,8 +51,29 @@ document
     const exchange = document.getElementById("exchange").value;
     const coin = document.getElementById("coin").value;
     const endDate = document.getElementById("endDate").value;
+    const successMessage = document.getElementById("successMessage");
 
-    const dataTypes = ["ohlc", "orderbook", "tick", "candle"]; // Only the supported data types
+    successMessage.style.display = "none";
+
+    const dataTypes = [
+      "ohlc",
+      "orderbook",
+      "tick",
+      // "candle",
+      // "realtime-market",
+      // "historical",
+    ];
+
+    for (const dataType of dataTypes) {
+      const downloadLink = document.getElementById(`${dataType}DownloadLink`);
+      const table = document.getElementById(`${dataType}Table`);
+      const noDataMessage = document.getElementById(`${dataType}NoData`);
+      if (downloadLink) downloadLink.style.display = "none";
+      if (table) table.style.display = "none";
+      if (noDataMessage) noDataMessage.style.display = "none";
+    }
+
+    let success = true;
 
     for (const dataType of dataTypes) {
       const response = await fetch(
@@ -90,12 +119,18 @@ document
           table.style.display = "block";
         }
       } else {
+        const noDataMessage = document.getElementById(`${dataType}NoData`);
+        if (noDataMessage) {
+          noDataMessage.style.display = "block";
+        }
         console.error(
           `Failed to fetch ${dataType.replace(/-/g, " ")} data: ${data.error}`
         );
-        alert(
-          `Failed to fetch ${dataType.replace(/-/g, " ")} data: ${data.error}`
-        );
+        success = false;
       }
+    }
+
+    if (success) {
+      successMessage.style.display = "block";
     }
   });
