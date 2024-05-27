@@ -67,10 +67,8 @@ document
     for (const dataType of dataTypes) {
       const downloadLink = document.getElementById(`${dataType}DownloadLink`);
       const table = document.getElementById(`${dataType}Table`);
-      const noDataMessage = document.getElementById(`${dataType}NoData`);
       if (downloadLink) downloadLink.style.display = "none";
       if (table) table.style.display = "none";
-      if (noDataMessage) noDataMessage.style.display = "none";
     }
 
     let success = true;
@@ -118,11 +116,13 @@ document
 
           table.style.display = "block";
         }
-      } else {
-        const noDataMessage = document.getElementById(`${dataType}NoData`);
-        if (noDataMessage) {
-          noDataMessage.style.display = "block";
+
+        // Show the tab for this data type if the data is available
+        const tab = document.querySelector(`.tab[data-type="${dataType}"]`);
+        if (tab) {
+          tab.classList.remove("hidden");
         }
+      } else {
         console.error(
           `Failed to fetch ${dataType.replace(/-/g, " ")} data: ${data.error}`
         );
