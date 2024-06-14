@@ -98,6 +98,8 @@ document
           const tbody = table.querySelector("tbody");
           tbody.innerHTML = ""; // Clear existing rows
 
+          let hasOrderType = false;
+
           rows.forEach((row) => {
             const columns = row
               .split(",")
@@ -105,14 +107,27 @@ document
             if (columns.length > 1) {
               // Ensure it's not an empty row
               const tr = document.createElement("tr");
-              columns.forEach((column) => {
+              columns.forEach((column, index) => {
                 const td = document.createElement("td");
                 td.textContent = column;
                 tr.appendChild(td);
+                if (dataType === "tick" && index === 4 && column) {
+                  hasOrderType = true;
+                }
               });
               tbody.appendChild(tr);
             }
           });
+
+          // Show or hide the "Order Type" header based on the presence of order type data
+          if (dataType === "tick") {
+            document.getElementById("orderTypeHeader").style.display =
+              hasOrderType ? "" : "none";
+          }
+          if (dataType === "orderbook") {
+            document.getElementById("timestampHeader").style.display =
+              exchange === "kraken" ? "" : "none";
+          }
 
           table.style.display = "block";
         }

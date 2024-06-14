@@ -59,6 +59,7 @@
         >
           <option value="kraken">Kraken</option>
           <option value="coinbase">Coinbase</option>
+          <option value="binanceus">Binance.us</option>
         </select>
       </div>
       <div class="mb-2">
@@ -141,6 +142,184 @@
           <tr>
             <th>Price</th>
             <th>Volume</th>
+            <th id="timestampHeader" style="display: none">Timestamp</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="tick" class="data-section">
+      <a
+        id="tickDownloadLink"
+        class="text-blue-500 hover:underline"
+        style="display: none"
+        >Download Tick CSV</a
+      >
+      <table
+        id="tickTable"
+        class="mt-4 bg-white shadow-md rounded border border-gray-200"
+        style="display: none"
+      >
+        <thead>
+          <tr>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>Time</th>
+            <th>Side</th>
+            <th id="orderTypeHeader" style="display: none">Order Type</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Data Fetcher</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .tab {
+        display: inline-block;
+        margin-right: 10px;
+        padding: 10px;
+        background: #ddd;
+        cursor: pointer;
+      }
+      .tab.active {
+        background: #bbb;
+      }
+      .tab.hidden {
+        display: none;
+      }
+      .data-section {
+        display: none;
+      }
+      .data-section.active {
+        display: block;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 p-6">
+    <h1 class="text-3xl font-bold mb-4">Crypto Data Fetcher</h1>
+    <form id="dataForm" class="mb-4">
+      <div class="mb-2">
+        <label for="exchange" class="block text-sm font-medium text-gray-700"
+          >Select Exchange:</label
+        >
+        <select
+          id="exchange"
+          class="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        >
+          <option value="kraken">Kraken</option>
+          <option value="coinbase">Coinbase</option>
+        </select>
+      </div>
+      <div class="mb-2">
+        <label for="coin" class="block text-sm font-medium text-gray-700"
+          >Select Coin:</label
+        >
+        <select
+          id="coin"
+          class="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        ></select>
+      </div>
+      <div class="mb-2">
+        <label for="endDate" class="block text-sm font-medium text-gray-700"
+          >End Date:</label
+        >
+        <input
+          type="date"
+          id="endDate"
+          class="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        />
+      </div>
+      <button
+        type="submit"
+        class="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        Fetch Data
+      </button>
+    </form>
+    <p id="successMessage" class="text-green-600 mb-4" style="display: none">
+      Data fetched successfully!
+    </p>
+    <div id="tabs" class="mb-4">
+      <div class="tab rounded hidden" data-type="ohlc">OHLC Data</div>
+      <div class="tab rounded hidden" data-type="orderbook">
+        Order Book Data
+      </div>
+      <div class="tab rounded hidden" data-type="tick">Tick Data</div>
+      <!-- <div class="tab hidden" data-type="candle">Candle Data</div>
+      <div class="tab hidden" data-type="realtime-market">Realtime Market Data</div>
+      <div class="tab hidden" data-type="historical">Historical Data</div> -->
+<!-- </div>
+    <div id="ohlc" class="data-section">
+      <a
+        id="ohlcDownloadLink"
+        class="text-blue-500 hover:underline"
+        style="display: none"
+        >Download OHLC CSV</a
+      >
+      <table
+        id="ohlcTable"
+        class="mt-4 bg-white shadow-md rounded border border-gray-200"
+        style="display: none"
+      >
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="orderbook" class="data-section">
+      <a
+        id="orderbookDownloadLink"
+        class="text-blue-500 hover:underline"
+        style="display: none"
+        >Download Order Book CSV</a
+      >
+      <table
+        id="orderbookTable"
+        class="mt-4 bg-white shadow-md rounded border border-gray-200"
+        style="display: none"
+      >
+        <thead>
+          <tr>
+            <th>Price</th>
+            <th>Volume</th>
             <th>Timestamp</th>
             <th>Type</th>
           </tr>
@@ -174,4 +353,4 @@
     </div>
     <script src="script.js"></script>
   </body>
-</html>
+</html> -->
