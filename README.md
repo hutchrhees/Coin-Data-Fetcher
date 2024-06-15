@@ -1,6 +1,6 @@
 # Crypto Data Fetcher
 
-This project is a simple web application that fetches cryptocurrency data from multiple exchanges (currently only Kraken and Coinbase are the supported exchanges). It supports fetching OHLC, Order Book, and Tick data. The fetched data can be downloaded as CSV files and viewed in a tabular format on the front end.
+This project is a simple web application that fetches cryptocurrency data from multiple exchanges (currently only Kraken, Coinbase, and Binace.US). It supports fetching OHLC, Order Book, and Tick data. The fetched data can be downloaded as CSV files and viewed in a tabular format on the front end.
 
 ## Features
 
@@ -47,11 +47,11 @@ The server will start running at `http://localhost:3000`.
 ### Usage
 
 1. **Open your browser and navigate to `http://localhost:3000`.**
-2. **Select the exchange (currently only Kraken is supported).**
+2. **Select the exchange.**
 3. **Select the cryptocurrency coin from the dropdown.**
 4. **Optionally, specify an end date.**
 5. **Click the "Fetch Data" button to retrieve the data.**
-6. **Click on different tabs to view different data sets (OHLC, Order Book, Tick, Candle).**
+6. **Click on different tabs to view different data sets (OHLC, Order Book, Tick).**
 7. **Download the respective CSV files by clicking on the "Download CSV" links.**
 
 ## Project Structure
