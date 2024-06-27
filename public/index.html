@@ -3,354 +3,269 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crypto Data Fetcher</title>
+    <title>CryptoInsightHQ</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
       rel="stylesheet"
     />
     <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #1a202c;
+        color: #cbd5e0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background-color: #2a2e35; /* Optional: add background color to container */
+        border-radius: 10px; /* Optional: add border radius to container */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add shadow to container */
+      }
+      h1 {
+        font-size: 3rem;
+        color: #63b3ed;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+        display: flex; /* Use flexbox for centering */
+        flex-direction: column; /* Stack elements vertically */
+        align-items: center; /* Center elements horizontally */
+      }
+      label {
+        display: inline-block;
+        margin-bottom: 5px;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+      select,
+      input[type="date"],
+      button {
+        width: 300px; /* Set maximum width */
+        max-width: 100%;
+        margin: 0 auto; /* Center align */
+        display: block; /* Center align */
+        padding: 8px 12px; /* Increase padding */
+        border: 1px solid #4a5568;
+        border-radius: 5px;
+        background-color: #2d3748;
+        color: #cbd5e0;
+        font-size: 0.875rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow */
+      }
+      /* select,
+      input[type="date"],
+      button {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #4a5568;
+        border-radius: 5px;
+        background-color: #2d3748;
+        color: #cbd5e0;
+      } */
+      button {
+        background-color: #3182ce;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #2b6cb0;
+      }
+
+      .tabs-container {
+        display: flex;
+        justify-content: center; /* Center the tabs container */
+        gap: 10px; /* Add spacing between tabs */
+        margin-top: 20px;
+      }
+
       .tab {
         display: inline-block;
-        margin-right: 10px;
+        width: auto; /* Set a fixed width for the tabs */
+        max-width: 100%;
+        text-align: center; /* Center the text within the tabs */
         padding: 10px;
-        background: #ddd;
+        background: #2d3748;
         cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        font-size: 0.875rem;
       }
       .tab.active {
-        background: #bbb;
+        background: #3182ce;
       }
       .tab.hidden {
         display: none;
       }
+      a[id*="DownloadLink"] {
+        margin-bottom: 16px;
+      }
+
       .data-section {
         display: none;
+        margin-top: 20px;
+        justify-content: center; /* Center the table within the container */
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+      }
+      .data-section table {
+        width: auto; /* Set the table width */
+        max-width: 100%; /* Optionally, set a max width for the table */
+        margin: 0 auto; /* Center align the table */
       }
       .data-section.active {
-        display: block;
+        display: flex;
       }
       table {
         width: 100%;
         border-collapse: collapse;
+        margin-top: 20px;
       }
       th,
       td {
-        border: 1px solid #ddd;
+        border: 1px solid #4a5568;
         padding: 8px;
         text-align: center;
       }
       th {
-        background-color: #f2f2f2;
+        background-color: #2d3748;
       }
       tr:hover {
-        background-color: #f1f1f1;
+        background-color: #4a5568;
+      }
+      a {
+        color: #63b3ed;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      /* .message {
+        display: none;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 5px;
+      } */
+      .message {
+        display: none;
+        max-width: 250px; /* Set maximum width */
+        margin: 0 auto; /* Center align */
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        font-size: 0.875rem;
+        transition: opacity 0.3s ease;
+      }
+      .message.success {
+        background-color: #48bb78;
+        color: #fff;
+        text-align: center;
+        opacity: 0.85;
+      }
+      .message.error {
+        background-color: #e53e3e;
+        color: #fff;
+      }
+      .message.warning {
+        background-color: #dd6b20;
+        color: #fff;
+        text-align: center;
+        opacity: 0.75;
       }
     </style>
   </head>
-  <body class="bg-gray-100 p-6">
-    <h1 class="text-3xl font-bold mb-4">Crypto Data Fetcher</h1>
-    <form id="dataForm" class="mb-4">
-      <div class="mb-2">
-        <label for="exchange" class="block text-sm font-medium text-gray-700"
-          >Select Exchange:</label
-        >
-        <select
-          id="exchange"
-          class="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        >
-          <option value="kraken">Kraken</option>
-          <option value="coinbase">Coinbase</option>
-          <option value="binanceus">Binance.us</option>
-        </select>
+  <body>
+    <div class="container">
+      <h1>CryptoInsightHQ</h1>
+      <form id="dataForm" class="mb-4">
+        <div class="form-group">
+          <label for="exchange">Select Exchange:</label>
+          <select id="exchange">
+            <option value="kraken">Kraken</option>
+            <option value="coinbase">Coinbase</option>
+            <option value="binanceus">Binance.us</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="coin">Select Coin:</label>
+          <select id="coin"></select>
+        </div>
+        <div class="form-group">
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" />
+        </div>
+
+        <button type="submit">Fetch Data</button>
+      </form>
+      <p id="endDateWarning" class="message warning">
+        End date is unavailable for tick data.
+      </p>
+      <p id="successMessage" class="message success">
+        Data fetched successfully!
+      </p>
+      <p id="noDataMessage" class="message error">
+        No data available with that end date.
+      </p>
+      <div class="tabs-container">
+        <div id="tabs" class="mb-4">
+          <div class="tab hidden" data-type="ohlc">OHLC Data</div>
+          <div class="tab hidden" data-type="orderbook">Order Book Data</div>
+          <div class="tab hidden" data-type="tick">Tick Data</div>
+        </div>
       </div>
-      <div class="mb-2">
-        <label for="coin" class="block text-sm font-medium text-gray-700"
-          >Select Coin:</label
+      <div id="ohlc" class="data-section">
+        <a id="ohlcDownloadLink" style="display: none">Download OHLC CSV</a>
+        <table id="ohlcTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Open</th>
+              <th>High</th>
+              <th>Low</th>
+              <th>Close</th>
+              <th>Volume</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div id="orderbook" class="data-section">
+        <a id="orderbookDownloadLink" style="display: none"
+          >Download Order Book CSV</a
         >
-        <select
-          id="coin"
-          class="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        ></select>
+        <table id="orderbookTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Price</th>
+              <th>Volume</th>
+              <th id="timestampHeader" style="display: none">Timestamp</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <div class="mb-2">
-        <label for="endDate" class="block text-sm font-medium text-gray-700"
-          >End Date:</label
-        >
-        <input
-          type="date"
-          id="endDate"
-          class="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        />
+      <div id="tick" class="data-section">
+        <a id="tickDownloadLink" style="display: none">Download Tick CSV</a>
+        <table id="tickTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Price</th>
+              <th>Volume</th>
+              <th>Time</th>
+              <th>Side</th>
+              <th id="orderTypeHeader" style="display: none">Order Type</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <button
-        type="submit"
-        class="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Fetch Data
-      </button>
-    </form>
-    <p id="successMessage" class="text-green-600 mb-4" style="display: none">
-      Data fetched successfully!
-    </p>
-    <div id="tabs" class="mb-4">
-      <div class="tab rounded hidden" data-type="ohlc">OHLC Data</div>
-      <div class="tab rounded hidden" data-type="orderbook">
-        Order Book Data
-      </div>
-      <div class="tab rounded hidden" data-type="tick">Tick Data</div>
-      <!-- <div class="tab hidden" data-type="candle">Candle Data</div>
-      <div class="tab hidden" data-type="realtime-market">Realtime Market Data</div>
-      <div class="tab hidden" data-type="historical">Historical Data</div> -->
-    </div>
-    <div id="ohlc" class="data-section">
-      <a
-        id="ohlcDownloadLink"
-        class="text-blue-500 hover:underline"
-        style="display: none"
-        >Download OHLC CSV</a
-      >
-      <table
-        id="ohlcTable"
-        class="mt-4 bg-white shadow-md rounded border border-gray-200"
-        style="display: none"
-      >
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Open</th>
-            <th>High</th>
-            <th>Low</th>
-            <th>Close</th>
-            <th>Volume</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div id="orderbook" class="data-section">
-      <a
-        id="orderbookDownloadLink"
-        class="text-blue-500 hover:underline"
-        style="display: none"
-        >Download Order Book CSV</a
-      >
-      <table
-        id="orderbookTable"
-        class="mt-4 bg-white shadow-md rounded border border-gray-200"
-        style="display: none"
-      >
-        <thead>
-          <tr>
-            <th>Price</th>
-            <th>Volume</th>
-            <th id="timestampHeader" style="display: none">Timestamp</th>
-            <th>Type</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div id="tick" class="data-section">
-      <a
-        id="tickDownloadLink"
-        class="text-blue-500 hover:underline"
-        style="display: none"
-        >Download Tick CSV</a
-      >
-      <table
-        id="tickTable"
-        class="mt-4 bg-white shadow-md rounded border border-gray-200"
-        style="display: none"
-      >
-        <thead>
-          <tr>
-            <th>Price</th>
-            <th>Volume</th>
-            <th>Time</th>
-            <th>Side</th>
-            <th id="orderTypeHeader" style="display: none">Order Type</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
     </div>
     <script src="script.js"></script>
   </body>
 </html>
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crypto Data Fetcher</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      .tab {
-        display: inline-block;
-        margin-right: 10px;
-        padding: 10px;
-        background: #ddd;
-        cursor: pointer;
-      }
-      .tab.active {
-        background: #bbb;
-      }
-      .tab.hidden {
-        display: none;
-      }
-      .data-section {
-        display: none;
-      }
-      .data-section.active {
-        display: block;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-      }
-      th {
-        background-color: #f2f2f2;
-      }
-      tr:hover {
-        background-color: #f1f1f1;
-      }
-    </style>
-  </head>
-  <body class="bg-gray-100 p-6">
-    <h1 class="text-3xl font-bold mb-4">Crypto Data Fetcher</h1>
-    <form id="dataForm" class="mb-4">
-      <div class="mb-2">
-        <label for="exchange" class="block text-sm font-medium text-gray-700"
-          >Select Exchange:</label
-        >
-        <select
-          id="exchange"
-          class="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        >
-          <option value="kraken">Kraken</option>
-          <option value="coinbase">Coinbase</option>
-        </select>
-      </div>
-      <div class="mb-2">
-        <label for="coin" class="block text-sm font-medium text-gray-700"
-          >Select Coin:</label
-        >
-        <select
-          id="coin"
-          class="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        ></select>
-      </div>
-      <div class="mb-2">
-        <label for="endDate" class="block text-sm font-medium text-gray-700"
-          >End Date:</label
-        >
-        <input
-          type="date"
-          id="endDate"
-          class="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        />
-      </div>
-      <button
-        type="submit"
-        class="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Fetch Data
-      </button>
-    </form>
-    <p id="successMessage" class="text-green-600 mb-4" style="display: none">
-      Data fetched successfully!
-    </p>
-    <div id="tabs" class="mb-4">
-      <div class="tab rounded hidden" data-type="ohlc">OHLC Data</div>
-      <div class="tab rounded hidden" data-type="orderbook">
-        Order Book Data
-      </div>
-      <div class="tab rounded hidden" data-type="tick">Tick Data</div>
-      <!-- <div class="tab hidden" data-type="candle">Candle Data</div>
-      <div class="tab hidden" data-type="realtime-market">Realtime Market Data</div>
-      <div class="tab hidden" data-type="historical">Historical Data</div> -->
-<!-- </div>
-    <div id="ohlc" class="data-section">
-      <a
-        id="ohlcDownloadLink"
-        class="text-blue-500 hover:underline"
-        style="display: none"
-        >Download OHLC CSV</a
-      >
-      <table
-        id="ohlcTable"
-        class="mt-4 bg-white shadow-md rounded border border-gray-200"
-        style="display: none"
-      >
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Open</th>
-            <th>High</th>
-            <th>Low</th>
-            <th>Close</th>
-            <th>Volume</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div id="orderbook" class="data-section">
-      <a
-        id="orderbookDownloadLink"
-        class="text-blue-500 hover:underline"
-        style="display: none"
-        >Download Order Book CSV</a
-      >
-      <table
-        id="orderbookTable"
-        class="mt-4 bg-white shadow-md rounded border border-gray-200"
-        style="display: none"
-      >
-        <thead>
-          <tr>
-            <th>Price</th>
-            <th>Volume</th>
-            <th>Timestamp</th>
-            <th>Type</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div id="tick" class="data-section">
-      <a
-        id="tickDownloadLink"
-        class="text-blue-500 hover:underline"
-        style="display: none"
-        >Download Tick CSV</a
-      >
-      <table
-        id="tickTable"
-        class="mt-4 bg-white shadow-md rounded border border-gray-200"
-        style="display: none"
-      >
-        <thead>
-          <tr>
-            <th>Price</th>
-            <th>Volume</th>
-            <th>Time</th>
-            <th>Side</th>
-            <th>Order Type</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <script src="script.js"></script>
-  </body>
-</html> -->
