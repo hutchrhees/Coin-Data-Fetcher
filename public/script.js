@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const coinSelect = document.getElementById("coin");
   const exchangeSelect = document.getElementById("exchange");
   const successMessage = document.getElementById("successMessage");
+  const endDateWarning = document.getElementById("endDateWarning");
 
   async function fetchCoins() {
     try {
@@ -19,6 +20,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         option.textContent = coin;
         coinSelect.appendChild(option);
       });
+      if (exchange === "coinbase") {
+        endDateWarning.style.display = "block";
+      } else {
+        endDateWarning.style.display = "none";
+      }
     } catch (error) {
       console.error("Error fetching coin options:", error);
     }
